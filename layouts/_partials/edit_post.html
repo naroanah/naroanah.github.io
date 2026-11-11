@@ -1,0 +1,16 @@
+{{- if and (.Param "editPost.URL") (not (.Param "editPost.disabled")) -}}
+    {{- $editURL := .Param "editPost.URL" }}
+    {{- $appendFilePath := .Param "editPost.appendFilePath" | default false }}
+    {{- $editText := .Param "editPost.Text" | default (i18n "edit_post" ) -}}
+
+    {{- if $appendFilePath -}}
+        {{- $fileUrlPath := path.Join .File.Path }}
+        {{- $editURL = printf "%s/%s" $editURL $fileUrlPath -}}
+    {{- end -}}
+
+    <span class="meta-item">
+        <a href="{{ $editURL }}" rel="noopener noreferrer edit" target="_blank">
+            {{- $editText -}}
+        </a>
+    </span>
+{{- end }}

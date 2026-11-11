@@ -1,0 +1,279 @@
+<style>
+    .heatmap-section {
+        margin-bottom: 30px;
+    }
+
+    .heatmap-container {
+        display: block;
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .heatmap-container {
+            display: none;
+        }
+    }
+
+    :root {
+        --heatmap-bg-light: #fff;
+        --heatmap-colors-light-0: #c6e48b;
+        --heatmap-colors-light-1: #7bc96f;
+        --heatmap-colors-light-2: #239a3b;
+        --heatmap-colors-light-3: #196127;
+        --tooltip-bg-light: #fff;
+        --tooltip-textstyle-light: #1c1a1b;
+
+        --heatmap-bg-dark: #585c59;
+        --heatmap-colors-dark-0: #c6e48b;
+        --heatmap-colors-dark-1: #7bc96f;
+        --heatmap-colors-dark-2: #239a3b;
+        --heatmap-colors-dark-3: #196127;
+        --tooltip-bg-dark: #585c59;
+        --tooltip-textstyle-dark: #fff;
+    }
+</style>
+
+<div class="heatmap-container">
+    <div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 12px">
+            <p style="margin-bottom: 0; padding: 8px">
+                {{ i18n "article_activity" }}
+            </p>
+            <select id="yearSelector"></select>
+        </div>
+        <div
+            id="heatmap"
+            style="
+                display: block;
+                height: 150px;
+                width: 75%;
+                padding: 2px;
+                margin: 0 auto;
+                text-align: center;
+            "
+        ></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.3.0/dist/echarts.min.js"></script>
+<script type="text/javascript">
+    var myChart;
+
+    function getCurrentTheme() {
+        const dataTheme = document.documentElement.getAttribute('data-theme');
+        if (dataTheme === 'dark' || dataTheme === 'light') {
+            return dataTheme;
+        }
+        if (document.body.classList.contains('dark')) {
+            return 'dark';
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function getThemeColors() {
+        if ('dark' === getCurrentTheme()) {
+            return [
+                getCSSVariableValue('--heatmap-colors-dark-0'),
+                getCSSVariableValue('--heatmap-colors-dark-1'),
+                getCSSVariableValue('--heatmap-colors-dark-2'),
+                getCSSVariableValue('--heatmap-colors-dark-3')
+            ];
+        } else {
+            return [
+                getCSSVariableValue('--heatmap-colors-light-0'),
+                getCSSVariableValue('--heatmap-colors-light-1'),
+                getCSSVariableValue('--heatmap-colors-light-2'),
+                getCSSVariableValue('--heatmap-colors-light-3')
+            ];
+        }
+    }
+
+    function getThemeBgColor() {
+        return getCurrentTheme() === 'dark'
+            ? getCSSVariableValue('--heatmap-bg-dark')
+            : getCSSVariableValue('--heatmap-bg-light');
+    }
+
+    function getTooltipBgColor() {
+        return getCurrentTheme() === 'dark'
+            ? getCSSVariableValue('--tooltip-bg-dark')
+            : getCSSVariableValue('--tooltip-bg-light');
+    }
+
+    function getTextStyleColor() {
+        return getCurrentTheme() === 'dark'
+            ? getCSSVariableValue('--tooltip-textstyle-dark')
+            : getCSSVariableValue('--tooltip-textstyle-light');
+    }
+
+    function getCSSVariableValue(variableName) {
+        return getComputedStyle(document.documentElement)
+            .getPropertyValue(variableName).trim();
+    }
+
+    function initOrUpdateChart() {
+        if (myChart) {
+            myChart.dispose();
+        }
+        const theme = getCurrentTheme();
+        const chartDom = document.getElementById('heatmap');
+        myChart = echarts.init(chartDom, theme === 'dark' ? 'dark' : 'light');
+        option.visualMap.inRange.color = getThemeColors();
+        option.calendar.itemStyle.color = getThemeBgColor();
+        option.tooltip.backgroundColor = getTooltipBgColor();
+        option.tooltip.textStyle.color = getTextStyleColor();
+        myChart.setOption(option);
+    }
+
+    function populatePostData() {
+        var postsByDate = new Map();
+        var years = new Set();
+        {{ range ((where .Site.RegularPages "Type" "post")) }}
+            var date = {{ .Date.Format "2006-01-02" }};
+            var year = {{ .Date.Format "2006" }};
+            years.add(year);
+            var postObj = new Map();
+            postObj.set("title", {{ .Title }});
+            postObj.set("link", {{ .RelPermalink }});
+            postObj.set("wordCount", {{ .WordCount }});
+            var wordCount = {{ .WordCount }};
+            var data = postsByDate.get(date);
+            if (data === undefined) {
+                data = new Map();
+                data.set("posts", []);
+                data.set("totalWordCount", 0);
+            }
+            var posts = data.get("posts");
+            posts.push(postObj);
+            var totalWordCount = data.get("totalWordCount");
+            totalWordCount += wordCount;
+            data.set("totalWordCount", totalWordCount);
+            postsByDate.set(date, data);
+        {{- end -}}
+
+        years = Array.from(years).sort().reverse();
+        if (years.length === 0) {
+            years.push(String(new Date().getFullYear()));
+        }
+        return [postsByDate, years];
+    }
+
+    function getHeatmapData(year) {
+        var heatmapData = [];
+        for (const [date, data] of postsByDate.entries()) {
+            if (date.startsWith(year)) {
+                heatmapData.push([date, data.get("totalWordCount")]);
+            }
+        }
+        return heatmapData;
+    }
+
+    function updateHeatmap(year) {
+        option.calendar.range = year;
+        option.series.data = getHeatmapData(year);
+        myChart.setOption(option);
+    }
+
+    function renderYearSelector(years) {
+        var yearSelector = document.getElementById('yearSelector');
+        years.forEach(year => {
+            var opt = document.createElement('option');
+            opt.value = year;
+            opt.text = year;
+            yearSelector.appendChild(opt);
+        });
+
+        yearSelector.addEventListener('change', function() {
+            updateHeatmap(this.value);
+        });
+    }
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes') {
+                initOrUpdateChart();
+            }
+        });
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme', 'class']
+    });
+
+    var option;
+    const [postsByDate, years] = populatePostData();
+    const latestYear = years[0];
+
+    option = {
+        title: { show: false },
+        legend: { show: false },
+        visualMap: {
+            show: false,
+            min: 0,
+            max: 10000,
+            type: 'piecewise',
+            showLabel: false,
+            orient: 'horizontal',
+            left: 'center',
+            top: 0,
+            itemGap: 10,
+            inRange: {
+                color: getThemeColors(),
+            },
+        },
+        calendar: {
+            top: 30,
+            left: 30,
+            right: 30,
+            cellSize: ['auto', 'auto'],
+            range: latestYear,
+            itemStyle: {
+                color: getThemeBgColor(),
+                borderWidth: 0.5,
+                borderColor: '#eee',
+            },
+            yearLabel: { show: false },
+            dayLabel: {
+                firstDay: 1,
+                nameMap: "{{.Lang}}"
+            },
+            monthLabel: {
+                nameMap: "{{.Lang}}"
+            },
+            splitLine: {
+                show: false,
+            },
+        },
+        tooltip: {
+            hideDelay: 1000,
+            enterable: true,
+            textStyle: {
+                color: getTextStyleColor(),
+            },
+            backgroundColor: getTooltipBgColor(),
+            formatter: function (params) {
+                const thousandWordsText = {{ i18n "thousand_words" }};
+                const date = params.data[0];
+                const posts = postsByDate.get(date).get("posts");
+                var content = `${date}`;
+                for (const [i, post] of posts.entries()) {
+                    content += "<br>";
+                    var link = post.get("link");
+                    var title = post.get("title");
+                    const thousandWords = (post.get("wordCount")/1000.0).toFixed(1);
+                    content += `<a href="${link}" target="_blank">${title} <span style="margin-left:8px;opacity:0.75">${thousandWords}${thousandWordsText}</span></a>`;
+                }
+                return content;
+            }
+        },
+        series: {
+            type: 'heatmap',
+            coordinateSystem: 'calendar',
+            calendarIndex: 0,
+            data: getHeatmapData(latestYear)
+        }
+    };
+
+    renderYearSelector(years);
+    initOrUpdateChart();
+</script>

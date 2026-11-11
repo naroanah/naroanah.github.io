@@ -1,0 +1,69 @@
+{{- if .Site.Params.giscus.repoId }}
+<section>
+  <h2>Comments</h2>
+  <div id="comments-giscus"></div>
+</section>
+<script type="text/javascript">
+function getCurrentTheme() {
+  const dataTheme = document.documentElement.getAttribute('data-theme');
+  if (dataTheme === 'dark' || dataTheme === 'light') {
+    return dataTheme;
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function setGiscusTheme(darkMode=false) {
+  const theme = darkMode ? "dark" : "light";
+  var iframe = document.querySelector('.giscus-frame');
+  if (iframe) {
+    var url = new URL(iframe.src);
+    url.searchParams.set('theme', theme);
+    iframe.src = url.toString();
+  }
+}
+
+function loadComment(darkMode=false) {
+  const isChinese = "{{.Lang}}" == "zh";
+  const commentContainer = document.getElementById("comments-giscus");
+  if (commentContainer !== null && !commentContainer.hasAttribute('data-giscus-loaded')) {
+    const commentScript = document.createElement("script");
+    commentScript.setAttribute("src", "https://giscus.app/client.js");
+    commentScript.setAttribute("data-repo", "{{ .Site.Params.giscus.repo }}");
+    commentScript.setAttribute("data-repo-id", "{{ .Site.Params.giscus.repoId }}");
+    commentScript.setAttribute("data-category", "{{ .Site.Params.giscus.category }}");
+    commentScript.setAttribute("data-category-id", "{{ .Site.Params.giscus.categoryId }}");
+    commentScript.setAttribute("data-mapping", "pathname");
+    commentScript.setAttribute("data-strict", "0");
+    commentScript.setAttribute("data-reactions-enabled", "1");
+    commentScript.setAttribute("data-emit-metadata", "0");
+    commentScript.setAttribute("data-input-position", "bottom");
+    commentScript.setAttribute("data-theme", darkMode ? "dark" : "light");
+    commentScript.setAttribute("crossorigin", "anonymous");
+    commentScript.setAttribute("data-lang", isChinese ? "zh-CN" : "en");
+    commentScript.setAttribute("async", "true");
+    commentContainer.appendChild(commentScript);
+    commentContainer.setAttribute('data-giscus-loaded', 'true');
+  }
+}
+
+let currentTheme = getCurrentTheme();
+loadComment(currentTheme === 'dark');
+
+const themeObserver = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.type === 'attributes') {
+      const newTheme = getCurrentTheme();
+      if (newTheme !== currentTheme) {
+        currentTheme = newTheme;
+        setGiscusTheme(currentTheme === 'dark');
+      }
+    }
+  });
+});
+
+themeObserver.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['data-theme', 'class']
+});
+</script>
+{{- end }}
