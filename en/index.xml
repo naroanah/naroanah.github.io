@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Aoran Han</title>
+    <link>https://naroanah.github.io/en/</link>
+    <description>Recent content on Aoran Han</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>2026 Aoran Han</copyright>
+    <lastBuildDate>Wed, 11 Nov 2026 17:45:05 +0800</lastBuildDate>
+    <atom:link href="https://naroanah.github.io/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About Me</title>
+      <link>https://naroanah.github.io/en/about/</link>
+      <pubDate>Wed, 11 Nov 2026 16:00:00 +0800</pubDate>
+      <guid>https://naroanah.github.io/en/about/</guid>
+      <description>&lt;h2 id=&#34;bio&#34;&gt;&lt;span class=&#34;section-num&#34;&gt;0x0&lt;/span&gt; Bio&lt;/h2&gt;
+&lt;p&gt;Hi, I&amp;rsquo;m Aoran Han, currently a student at Tsinghua University.&lt;/p&gt;
+&lt;h2 id=&#34;interests&#34;&gt;&lt;span class=&#34;section-num&#34;&gt;0x1&lt;/span&gt; Interests&lt;/h2&gt;
+&lt;p&gt;My interests span computer science, artificial intelligence, agentic workflows, and software engineering.&lt;/p&gt;
+&lt;h2 id=&#34;about-this-site&#34;&gt;&lt;span class=&#34;section-num&#34;&gt;0x2&lt;/span&gt; About This Site&lt;/h2&gt;
+&lt;p&gt;This blog is built with &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; and the &lt;a href=&#34;https://github.com/adityatelange/hugo-PaperMod&#34;&gt;PaperMod&lt;/a&gt; theme, adapted from &lt;a href=&#34;https://github.com/ramsayleung/ramsayleung.github.io&#34;&gt;Ramsay Leung&amp;rsquo;s blog setup&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;contact&#34;&gt;&lt;span class=&#34;section-num&#34;&gt;0x3&lt;/span&gt; Contact&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;GitHub: &lt;a href=&#34;https://github.com/naroanah&#34;&gt;github.com/naroanah&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+      <content:encoded><![CDATA[<h2 id="bio"><span class="section-num">0x0</span> Bio</h2>
+<p>Hi, I&rsquo;m Aoran Han, currently a student at Tsinghua University.</p>
+<h2 id="interests"><span class="section-num">0x1</span> Interests</h2>
+<p>My interests span computer science, artificial intelligence, agentic workflows, and software engineering.</p>
+<h2 id="about-this-site"><span class="section-num">0x2</span> About This Site</h2>
+<p>This blog is built with <a href="https://gohugo.io/">Hugo</a> and the <a href="https://github.com/adityatelange/hugo-PaperMod">PaperMod</a> theme, adapted from <a href="https://github.com/ramsayleung/ramsayleung.github.io">Ramsay Leung&rsquo;s blog setup</a>.</p>
+<h2 id="contact"><span class="section-num">0x3</span> Contact</h2>
+<ul>
+<li>GitHub: <a href="https://github.com/naroanah">github.com/naroanah</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>
