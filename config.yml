@@ -1,0 +1,198 @@
+baseURL: https://naroanah.github.io
+title: "Aoran Han"
+pagination:
+  pagerSize: 5
+theme: PaperMod
+
+locale: zh-cn
+rssLimit: 10
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+hasCJKLanguage: true
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+params:
+  env: production
+  title: "Aoran Han"
+  description: "Aoran Han 的个人博客"
+  keywords: [Blog, Computer Science, AI, Engineering, Notes]
+  author: Aoran Han
+  DateFormat: "2006-01-02"
+  math: true
+  defaultTheme: auto
+  disableThemeToggle: false
+  displayFullLangName: true
+
+  ShowFullTextInRSS: true
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  hideAuthor: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  hidemeta: false
+  hideSummary: false
+  comments: true
+  showtoc: true
+  tocopen: false
+
+  assets:
+    disableHLJS: true
+    favicon: "/favicon.ico"
+    favicon16x16: "/favicon-16x16.png"
+    favicon32x32: "/favicon-32x32.png"
+    apple_touch_icon: "/apple-touch-icon.png"
+
+  label:
+    text: "Aoran Han"
+    icon: /apple-touch-icon.png
+    iconHeight: 32
+
+  profileMode:
+    enabled: false
+
+  cover:
+    hidden: true
+    hiddenInList: true
+    hiddenInSingle: true
+
+  editPost:
+    URL: "https://github.com/naroanah/naroanah.github.io/blob/main/content"
+    Text: "Suggest Changes"
+    appendFilePath: true
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+  # 如需启用 Giscus 评论，在 https://giscus.app 获取 repoId 和 categoryId 填入即可自动生效
+  giscus:
+    repo: "naroanah/naroanah.github.io"
+    repoId: ""
+    category: "General"
+    categoryId: ""
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/naroanah"
+    - name: email
+      url: "mailto:87551319+naroanah@users.noreply.github.com"
+    - name: rss
+      url: "index.xml"
+
+defaultContentLanguageInSubdir: true
+defaultContentLanguage: zh
+copyright: "© 2026 Aoran Han"
+
+languages:
+  zh:
+    title: "Aoran Han"
+    label: "中文"
+    subtitle: "思考与技术笔记"
+    contentDir: "content/zh"
+    weight: 1
+    params:
+      homeInfoParams:
+        Title: "你好 👋"
+        Content: >
+          我是韩傲然（Aoran Han），目前就读于清华大学。这里记录我的技术探索、学术笔记与日常思考。
+      editPost:
+        URL: "https://github.com/naroanah/naroanah.github.io/blob/main/content/zh"
+        Text: "在 GitHub 上编辑"
+        appendFilePath: true
+    menu:
+      main:
+        - identifier: series
+          name: "系列"
+          url: categories/
+          post: " ▾"
+          weight: 2
+        - identifier: tech_notes
+          parent: series
+          name: "技术笔记"
+          url: categories/技术笔记/
+          weight: 1
+        - identifier: reading
+          parent: series
+          name: "读书与思考"
+          url: categories/读书与思考/
+          weight: 2
+        - name: "归档"
+          url: archives/
+          weight: 9
+        - name: "搜索"
+          url: search/
+          weight: 10
+        - name: "标签"
+          url: tags/
+          weight: 30
+        - name: "关于"
+          url: about/
+          weight: 40
+        - name: "RSS"
+          url: index.xml
+          weight: 50
+
+  en:
+    title: "Aoran Han"
+    label: "English"
+    subtitle: "Notes on CS, AI, and Life"
+    contentDir: "content/en"
+    weight: 2
+    params:
+      homeInfoParams:
+        Title: "Hi there 👋"
+        Content: >
+          I'm Aoran Han, a student at Tsinghua University. I write about computer science, AI research, and engineering.
+      editPost:
+        URL: "https://github.com/naroanah/naroanah.github.io/blob/main/content/en"
+        Text: "Suggest Changes"
+        appendFilePath: true
+    menu:
+      main:
+        - name: Archives
+          url: archives/
+          weight: 1
+        - name: Search
+          url: search/
+          weight: 10
+        - name: Tags
+          url: tags/
+          weight: 30
+        - name: About
+          url: about/
+          weight: 40
+        - name: RSS
+          url: index.xml
+          weight: 50
+
+markup:
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+  goldmark:
+    renderer:
+      unsafe: true
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
